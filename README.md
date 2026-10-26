@@ -17,7 +17,7 @@ PWUTS_A04_25091397018/
 │   └── style.css       # File Cascading Style Sheet eksternal murni
 └── js/
     └── script.js       # File JavaScript eksternal murni (DOM, JSON, Ajax, Storage)
----
+```
 
 ## 🛠️ Penjelasan Pemenuhan Ketentuan UTS
 1. Tugas 2.a — Homepage Layout Utama (index.html)
