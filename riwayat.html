@@ -1,0 +1,138 @@
+<!-- HALAMAN TUGAS 2.b: DAFTAR WARGA, RIWAYAT SETORAN & SIMULASI MULTI-ITEM -->
+<article class="content-panel">
+    <div class="panel-header">
+        <h2>Daftar Akun Warga &amp; Laporan Tabungan Sampah</h2>
+        <p>
+            Menampilkan data warga Komplek Perumahan Puri Indah beserta akumulasi nominal tabungan dari setoran langsung (mengacu tabel <code>users</code> dan <code>deposits</code>).
+        </p>
+    </div>
+
+    <!-- 1. TABEL DAFTAR AKUN WARGA & NOMINAL TABUNGAN -->
+    <div class="table-responsive">
+        <table class="custom-table" border="1" cellspacing="0" cellpadding="8">
+            <thead>
+                <tr>
+                    <th>ID Warga</th>
+                    <th>Nama Lengkap Warga</th>
+                    <th>Blok / Alamat Rumah</th>
+                    <th>No. HP</th>
+                    <th>Status Akun</th>
+                    <th>Frekuensi Setor</th>
+                    <th>Total Berat (Kg)</th>
+                    <th>Total Tabungan (Rp)</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-daftar-warga">
+                <!-- Diisi secara dinamis melalui DOM Manipulation di script.js -->
+            </tbody>
+        </table>
+    </div>
+</article>
+
+<!-- 2. FITUR FILTER / PENCARIAN INTERAKTIF RIWAYAT SETORAN WARGA -->
+<article class="content-panel">
+    <div class="panel-header">
+        <h2>Riwayat Rincian Setoran Langsung Warga</h2>
+        <p>
+            Gunakan fitur pencarian dan filter interaktif di bawah ini untuk menyaring riwayat setoran berdasarkan nama warga, jenis sampah, atau kondisi sampah (mengacu tabel <code>deposits</code> &amp; <code>deposit_items</code>).
+        </p>
+    </div>
+
+    <div class="filter-bar">
+        <div class="filter-group">
+            <label for="filter-keyword">Cari Warga / ID Deposit:</label>
+            <input type="search" id="filter-keyword" placeholder="Ketik nama warga..." onkeyup="filterRiwayatSetoran()" />
+        </div>
+
+        <div class="filter-group">
+            <label for="filter-jenis">Filter Jenis Sampah:</label>
+            <select id="filter-jenis" onchange="filterRiwayatSetoran()">
+                <option value="SEMUA">-- Semua Jenis Sampah --</option>
+                <option value="Botol Plastik">Botol Plastik</option>
+                <option value="Galon Plastik">Galon Plastik</option>
+                <option value="Kardus">Kardus</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="filter-kondisi">Filter Kondisi Sampah:</label>
+            <select id="filter-kondisi" onchange="filterRiwayatSetoran()">
+                <option value="SEMUA">-- Semua Kondisi --</option>
+                <option value="Bersih">Bersih (Siap Setor Pusat)</option>
+                <option value="Kotor">Kotor (Belum Dipilah)</option>
+            </select>
+        </div>
+
+        <div class="filter-group filter-action">
+            <button type="button" class="btn-secondary btn-sm" onclick="resetFilterRiwayat()">Reset Filter</button>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-table" border="1" cellspacing="0" cellpadding="8">
+            <thead>
+                <tr>
+                    <th>ID Deposit</th>
+                    <th>Tanggal Setor</th>
+                    <th>Nama Warga</th>
+                    <th>Metode</th>
+                    <th>Jenis Sampah</th>
+                    <th>Kondisi</th>
+                    <th>Berat (Kg)</th>
+                    <th>Harga Satuan</th>
+                    <th>Subtotal Bersih</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-riwayat-setoran">
+                <!-- Diisi secara dinamis melalui DOM Manipulation di script.js -->
+            </tbody>
+        </table>
+    </div>
+    <p id="info-jumlah-riwayat" class="table-footer-note"></p>
+</article>
+
+<!-- 3. SIMULASI KALKULASI MULTI-ITEM SETOR LANGSUNG (DYNAMIC ROW) -->
+<article class="content-panel">
+    <div class="panel-header">
+        <h2>Simulasi Kalkulasi Multi-Item Setor Langsung (Dynamic Row)</h2>
+        <p>
+            Simulasi tabel dinamis untuk menghitung beberapa item sampah sekaligus: 
+            <code>harga_satuan &times; berat = subtotal</code> hingga menghasilkan <code>total_harga</code> secara otomatis 
+            <strong>tanpa potongan biaya jemput (Rp 0)</strong>.
+        </p>
+    </div>
+
+    <div class="simulasi-actions">
+        <button type="button" class="btn-primary" onclick="tambahBarisSimulasi()">+ Tambah Baris Item Sampah</button>
+        <button type="button" class="btn-secondary" onclick="resetTabelSimulasi()">Kosongkan Simulasi</button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-table" border="1" cellspacing="0" cellpadding="8">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Pilihan Jenis Sampah (<code>jenis_id</code>)</th>
+                    <th>Kondisi Sampah (<code>kondisi</code>)</th>
+                    <th>Berat Sampah (<code>kg</code>)</th>
+                    <th>Harga Satuan (<code>harga_satuan</code>)</th>
+                    <th>Subtotal (<code>subtotal</code>)</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-simulasi">
+                <!-- Baris simulasi dinamis ditambahkan oleh JavaScript -->
+            </tbody>
+            <tfoot>
+                <tr class="summary-row">
+                    <td colspan="3" align="right"><strong>Total Keseluruhan Simulasi:</strong></td>
+                    <td><strong id="sim-total-berat">0.00 Kg</strong></td>
+                    <td align="right"><strong>Potongan Jemput: Rp 0</strong></td>
+                    <td><strong id="sim-total-harga" class="highlight-nominal">Rp 0</strong></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</article>

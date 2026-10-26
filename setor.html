@@ -1,0 +1,125 @@
+<!-- HALAMAN TUGAS 2.c: FORM PENDATAAN SETOR SAMPAH LANGSUNG & VALIDASI -->
+<article class="content-panel">
+    <div class="panel-header">
+        <h2>Form Pendataan Setor Sampah Langsung</h2>
+        <p>
+            Formulir pencatatan transaksi warga yang datang menyetor sampah daur ulang secara langsung ke Bank Sampah Komplek Perumahan Puri Indah (mengacu pada tabel <code>deposits</code> dan <code>deposit_items</code>).
+        </p>
+    </div>
+
+    <!-- KOTak PESAN ERROR VALIDASI FORM -->
+    <div id="form-error-box" class="alert-error" style="display: none;">
+        <strong>Validasi Gagal! Mohon periksa kembali isian berikut:</strong>
+        <ul id="form-error-list"></ul>
+    </div>
+
+    <form id="form-setor-langsung" onsubmit="return prosesSubmitSetoran(event)" novalidate="novalidate">
+        
+        <!-- BAGIAN 1: DATA HEADER TRANSAKSI (Tabel deposits) -->
+        <fieldset class="form-fieldset">
+            <legend>1. Data Penyetor &amp; Waktu Transaksi (Tabel <code>deposits</code>)</legend>
+
+            <div class="form-row">
+                <div class="form-col">
+                    <label for="input-warga">Warga Penyetor (<code>warga_id</code>) <span class="req">*</span></label>
+                    <select id="input-warga" name="warga_id" onchange="tampilkanInfoWargaTerpilih()">
+                        <option value="">-- Pilih Akun Warga Komplek Puri Indah --</option>
+                        <!-- Opsi warga diisi otomatis dari data users di script.js -->
+                    </select>
+                    <small id="detail-warga-terpilih" class="field-hint">Wajib memilih akun warga yang terdaftar.</small>
+                </div>
+
+                <div class="form-col">
+                    <label for="input-tanggal">Tanggal Setor (<code>tgl_setor</code>) <span class="req">*</span></label>
+                    <input type="date" id="input-tanggal" name="tgl_setor" />
+                    <small class="field-hint">Tanggal kedatangan warga di bank sampah.</small>
+                </div>
+
+                <div class="form-col">
+                    <label for="input-metode">Metode Penyetoran (<code>metode</code>)</label>
+                    <input type="text" id="input-metode" name="metode" value="Setor Langsung" readonly="readonly" class="input-readonly" />
+                    <input type="hidden" id="input-petugas" name="petugas_id" value="2" />
+                    <small class="field-hint">Bebas biaya penjemputan kurir (Potongan Rp 0).</small>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </fieldset>
+
+        <!-- BAGIAN 2: RINCIAN ITEM SAMPAH (Tabel deposit_items) -->
+        <fieldset class="form-fieldset">
+            <legend>2. Rincian Sampah &amp; Kalkulasi Otomatis (Tabel <code>deposit_items</code>)</legend>
+
+            <div class="form-row">
+                <div class="form-col">
+                    <label for="input-jenis">Pilihan Jenis Sampah (<code>jenis_id</code>) <span class="req">*</span></label>
+                    <select id="input-jenis" name="jenis_id" onchange="hitungOtomatisFormSetor()">
+                        <option value="">-- Pilih Jenis Sampah Daur Ulang --</option>
+                        <option value="1">1 - Botol Plastik (PET)</option>
+                        <option value="2">2 - Galon Plastik (PC/HDPE)</option>
+                        <option value="3">3 - Kardus / Karton Bekas</option>
+                    </select>
+                    <small class="field-hint">Dibatasi hanya untuk 3 jenis sampah daur ulang.</small>
+                </div>
+
+                <div class="form-col">
+                    <label>Kondisi Sampah (<code>kondisi</code>) <span class="req">*</span></label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="kondisi" id="kondisi-bersih" value="Bersih" onclick="hitungOtomatisFormSetor()" />
+                            <strong>Bersih</strong> (Sudah dipilah &amp; diremukkan)
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="kondisi" id="kondisi-kotor" value="Kotor" onclick="hitungOtomatisFormSetor()" />
+                            <strong>Kotor</strong> (Masih ada label/tutup/belum dipilah)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-col">
+                    <label for="input-berat">Berat Sampah (<code>berat</code> dalam Kg) <span class="req">*</span></label>
+                    <input type="number" id="input-berat" name="berat" step="0.1" min="0" placeholder="Contoh: 2.5" onkeyup="hitungOtomatisFormSetor()" onchange="hitungOtomatisFormSetor()" />
+                    <small class="field-hint">Masukkan angka desimal/bulat lebih dari 0 (misal: <code>1.5</code>).</small>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <!-- PANEL KALKULASI OTOMATIS -->
+            <div class="calc-summary-box">
+                <div class="calc-item">
+                    <span>Harga Satuan (<code>harga_satuan</code>)</span>
+                    <strong id="display-harga-satuan">Rp 0 / kg</strong>
+                    <input type="hidden" id="input-harga-satuan" name="harga_satuan" value="0" />
+                </div>
+                <div class="calc-item">
+                    <span>Subtotal Harga (<code>subtotal</code>)</span>
+                    <strong id="display-subtotal">Rp 0</strong>
+                    <input type="hidden" id="input-subtotal" name="subtotal" value="0" />
+                </div>
+                <div class="calc-item">
+                    <span>Potongan Jemput (<code>potongan_jemput</code>)</span>
+                    <strong>Rp 0 (Setor Langsung)</strong>
+                    <input type="hidden" id="input-potongan" name="potongan_jemput" value="0" />
+                </div>
+                <div class="calc-item calc-total">
+                    <span>Total Bersih Diterima (<code>total_bersih</code>)</span>
+                    <strong id="display-total-bersih">Rp 0</strong>
+                    <input type="hidden" id="input-total-bersih" name="total_bersih" value="0" />
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-col-full">
+                    <label for="input-catatan">Catatan Tambahan Pengelola (Opsional):</label>
+                    <textarea id="input-catatan" rows="2" placeholder="Contoh: Botol plastik sudah dipres rapi oleh warga..."></textarea>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- TOMBOL AKSI FORM -->
+        <div class="form-actions">
+            <input type="submit" class="btn-primary" value="Simpan Setoran" />
+            <input type="reset" class="btn-secondary" value="Reset Form" onclick="resetKalkulasiForm()" />
+        </div>
+    </form>
+</article>

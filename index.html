@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NabungSampah - Dashboard Pengelola Bank Sampah</title>
+    <!-- Penggunaan External Style Sheet sesuai materi 0401_css.pptx -->
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+<body>
+
+    <!-- HEADER UTAMA (Sesuai Struktur Semantik HTML5 & Wireframe Dashboard) -->
+    <header id="header">
+        <div class="header-left">
+            <h1>NabungSampah<sup class="reg-mark">&reg;</sup></h1>
+            <p class="subtitle">
+                Sistem Pendataan Setor Langsung Bank Sampah &bull; 
+                <abbr title="Komplek Perumahan Puri Indah">KPPI</abbr>
+            </p>
+        </div>
+        <div class="header-right">
+            <div class="petugas-badge" onmouseover="ubahSorotPetugas(this, true)" onmouseout="ubahSorotPetugas(this, false)">
+                <strong>Pengelola Aktif:</strong> Abidah Azka Zaen P. (<small>ID Petugas: <code>PTG-02</code></small>)
+            </div>
+            <button type="button" class="btn-secondary btn-sm" onclick="resetDataDemo()">Reset Data Demo</button>
+        </div>
+        <div class="clear"></div>
+    </header>
+
+    <!-- WRAPPER UTAMA DASHBOARD -->
+    <div id="dashboard-wrapper">
+
+        <!-- SIDEBAR NAVIGASI KIRI (Wireframe Dashboard 4.4.1) -->
+        <aside id="sidebar">
+            <nav id="navigation">
+                <h2>Menu Pengelola</h2>
+                <ul class="nav-list">
+                    <li>
+                        <a href="javascript:void(0)" id="nav-home" class="nav-link active" onclick="muatHalamanAjax('home', this)">
+                            &#9632; Ringkasan Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" id="nav-riwayat" class="nav-link" onclick="muatHalamanAjax('riwayat.html', this)">
+                            &#9632; Riwayat &amp; Simulasi (2.b)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" id="nav-setor" class="nav-link" onclick="muatHalamanAjax('setor.html', this)">
+                            &#9632; Form Setor Langsung (2.c)
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Informasi Katalog Harga Sampah (Mengacu tabel waste_types & waste_prices) -->
+            <div class="sidebar-info">
+                <h3>Katalog Tarif Setor</h3>
+                <p><small>Harga per kilogram (kg) berdasarkan kondisi:</small></p>
+                <dl class="tarif-list">
+                    <dt>1. Botol Plastik</dt>
+                    <dd>Kotor: <b>Rp 2.000</b> | Bersih: <b>Rp 3.500</b></dd>
+                    <dt>2. Galon Plastik</dt>
+                    <dd>Kotor: <b>Rp 3.000</b> | Bersih: <b>Rp 5.000</b></dd>
+                    <dt>3. Kardus</dt>
+                    <dd>Kotor: <b>Rp 1.500</b> | Bersih: <b>Rp 2.500</b></dd>
+                </dl>
+                <p class="note-box">
+                    <em>Catatan:</em> Metode <strong>Setor Langsung</strong> bebas potongan biaya jemput (Potongan Rp 0).
+                </p>
+            </div>
+        </aside>
+
+        <!-- BAGIAN KANAN: RINGKASAN STATISTIK & KONTEN UTAMA AJAX -->
+        <main id="main-area">
+
+            <!-- 3 KARTU RINGKASAN STATISTIK (Sesuai Wireframe Dashboard & Tugas 2.a) -->
+            <section id="summary-section">
+                <div class="stat-card" ondblclick="infoKartuStatistik('warga')">
+                    <span class="stat-label">Total Akun Warga Aktif</span>
+                    <h2 id="stat-total-warga">0 Warga</h2>
+                    <small>Komplek Perumahan Puri Indah</small>
+                </div>
+
+                <div class="stat-card" ondblclick="infoKartuStatistik('berat')">
+                    <span class="stat-label">Total Berat Setor Langsung</span>
+                    <h2 id="stat-total-berat">0.0 Kg</h2>
+                    <small id="stat-total-transaksi">0 Transaksi Tercatat</small>
+                </div>
+
+                <div class="stat-card stat-card-highlight" ondblclick="infoKartuStatistik('nominal')">
+                    <span class="stat-label">Total Tabungan Setor Langsung</span>
+                    <h2 id="stat-total-nominal">Rp 0</h2>
+                    <small>100% Utuh Tanpa Potongan Jemput</small>
+                </div>
+                <div class="clear"></div>
+            </section>
+
+            <!-- INDIKATOR LOADING AJAX -->
+            <div id="loading-indicator" style="display: none;">
+                Memuat halaman via XMLHttpRequest (Ajax)... Mohon tunggu...
+            </div>
+
+            <!-- KONTAINER UTAMA YANG DIMUAT SECARA DINAMIS VIA AJAX -->
+            <section id="ajax-container">
+                <!-- Konten default Beranda Dashboard akan dirender saat inisialisasi -->
+            </section>
+
+        </main>
+
+        <div class="clear"></div>
+    </div>
+
+    <!-- POP-UP MODAL BERHASIL / GAGAL (Sesuai Wireframe 4.4.1 Poin 4) -->
+    <div id="popup-overlay" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <div id="popup-icon" class="modal-circle-icon">&#10003;</div>
+            <h3 id="popup-title"> Judul Pop-Up </h3>
+            <p id="popup-message">Pesan rincian transaksi akan tampil di sini.</p>
+            <div class="modal-actions">
+                <button type="button" id="popup-btn-ok" class="btn-primary" onclick="tutupPopup()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER (Sesuai Struktur Semantik HTML5) -->
+    <footer id="footer">
+        <small>
+            &copy; 2026 <strong>NabungSampah</strong> &mdash; Kelompok A04 D4 Manajemen Informatika UNESA | 
+            Anggota 2: Abidah Azka Zaen Prasetyo (<code>25091397018</code>)
+        </small>
+    </footer>
+
+    <!-- Penggunaan External JavaScript sesuai materi 0501_javascript.pptx -->
+    <script src="js/script.js"></script>
+</body>
+</html>
