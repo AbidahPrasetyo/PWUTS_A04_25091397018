@@ -4,25 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NabungSampah - Dashboard Pengelola Bank Sampah</title>
-    <!-- Penggunaan External Style Sheet sesuai materi 0401_css.pptx -->
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 <body>
-
-    <!-- HEADER UTAMA (Sesuai Struktur Semantik HTML5 & Wireframe Dashboard) -->
     <header id="header">
         <div class="header-left">
-            <h1>NabungSampah<sup class="reg-mark">&reg;</sup></h1>
+            <h1>NabungSampah</h1>
             <p class="subtitle">
-                Sistem Pendataan Setor Langsung Bank Sampah &bull; 
-                <abbr title="Komplek Perumahan Puri Indah">KPPI</abbr>
+                Pengelola
             </p>
         </div>
         <div class="header-right">
             <div class="petugas-badge" onmouseover="ubahSorotPetugas(this, true)" onmouseout="ubahSorotPetugas(this, false)">
-                <strong>Pengelola Aktif:</strong> Abidah Azka Zaen P. (<small>ID Petugas: <code>PTG-02</code></small>)
+                Abidah<br/>
+                <small>ID Petugas: <code>PTG-02</code></small>
             </div>
-            <button type="button" class="btn-secondary btn-sm" onclick="resetDataDemo()">Reset Data Demo</button>
         </div>
         <div class="clear"></div>
     </header>
@@ -33,21 +29,21 @@
         <!-- SIDEBAR NAVIGASI KIRI (Wireframe Dashboard 4.4.1) -->
         <aside id="sidebar">
             <nav id="navigation">
-                <h2>Menu Pengelola</h2>
+                <h2>Menu</h2>
                 <ul class="nav-list">
                     <li>
                         <a href="javascript:void(0)" id="nav-home" class="nav-link active" onclick="muatHalamanAjax('home', this)">
-                            &#9632; Ringkasan Dashboard
+                            Dashboard
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0)" id="nav-riwayat" class="nav-link" onclick="muatHalamanAjax('riwayat.html', this)">
-                            &#9632; Riwayat &amp; Simulasi (2.b)
+                            Riwayat & Simulasi
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0)" id="nav-setor" class="nav-link" onclick="muatHalamanAjax('setor.html', this)">
-                            &#9632; Form Setor Langsung (2.c)
+                            Form Penyetoran
                         </a>
                     </li>
                 </ul>
@@ -74,7 +70,7 @@
         <!-- BAGIAN KANAN: RINGKASAN STATISTIK & KONTEN UTAMA AJAX -->
         <main id="main-area">
 
-            <!-- 3 KARTU RINGKASAN STATISTIK (Sesuai Wireframe Dashboard & Tugas 2.a) -->
+            <!-- 3 KARTU RINGKASAN STATISTIK -->
             <section id="summary-section">
                 <div class="stat-card" ondblclick="infoKartuStatistik('warga')">
                     <span class="stat-label">Total Akun Warga Aktif</span>

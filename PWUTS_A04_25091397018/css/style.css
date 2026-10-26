@@ -115,6 +115,11 @@ code {
     background-color: #FFFFFF;
     border: 2px solid #5D4037;
     padding: 18px;
+    
+    position: sticky;        
+    top: 20px;            
+    height: calc(100vh - 40px);
+    overflow-y: auto;          
 }
 
 #main-area {
@@ -638,6 +643,12 @@ label.radio-label {
         text-align: left;
     }
 
+    #sidebar {
+        position: static;
+        height: auto;
+        overflow-y: visible;
+    }
+
     .calc-item.calc-total {
         border-left: none;
         border-top: 1px dashed #8D6E63;
@@ -645,3 +656,10 @@ label.radio-label {
         padding-top: 8px;
     }
 }
+
+    .calc-item.calc-total {
+        border-left: none;
+        border-top: 1px dashed #8D6E63;
+        padding-left: 0;
+        padding-top: 8px;
+    }

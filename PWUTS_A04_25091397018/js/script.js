@@ -129,7 +129,7 @@ function simpanKeLocalStorage() {
 }
 
 function resetDataDemo() {
-    var konfirmasi = window.confirm("Apakah Anda yakin ingin mengembalikan data setoran ke data awal (default)?");
+    var konfirmasi = window.confirm("Apakah Anda yakin ingin mengembalikan data setoran ke data awal?");
     if (konfirmasi) {
         localStorage.removeItem("nabungsampah_warga");
         localStorage.removeItem("nabungsampah_setoran");
@@ -305,11 +305,7 @@ function renderBerandaDashboard() {
 
     var html = '' +
         '<article class="content-panel">' +
-            '<div class="panel-header">' +
-                '<h2>Selamat Datang di Dashboard Pengelola Bank Sampah</h2>' +
-                '<p>Modul ini dikhususkan bagi <strong>Pengelola Bank Sampah</strong> untuk mendata warga Komplek Perumahan Puri Indah yang menyetor sampah daur ulang secara langsung ke lokasi bank sampah.</p>' +
-            '</div>' +
-            '<h3>Komposisi Sampah Daur Ulang Terkumpul (Setor Langsung)</h3>' +
+           '<h3>Komposisi Sampah Daur Ulang Terkumpul</h3>' +
             '<table class="custom-table" border="1" cellspacing="0" cellpadding="8">' +
                 '<thead>' +
                     '<tr>' +
@@ -343,11 +339,7 @@ function renderBerandaDashboard() {
                         '<td><b>' + totalKardus.toFixed(1) + ' Kg</b></td>' +
                     '</tr>' +
                 '</tbody>' +
-            '</table>' +
-            '<div style="margin-top: 18px;">' +
-                '<button type="button" class="btn-primary" onclick="muatHalamanAjax(\'setor.html\', document.getElementById(\'nav-setor\'))">+ Input Setoran Langsung Baru (2.c)</button> ' +
-                '<button type="button" class="btn-secondary" onclick="muatHalamanAjax(\'riwayat.html\', document.getElementById(\'nav-riwayat\'))">Lihat Riwayat &amp; Simulasi Harga (2.b)</button>' +
-            '</div>' +
+            '</table>'
         '</article>';
 
     kontainer.innerHTML = html;
@@ -780,7 +772,6 @@ function ambilFallbackTemplate(halaman) {
         '<article class="content-panel">' +
             '<div class="panel-header">' +
                 '<h2>Daftar Akun Warga &amp; Laporan Tabungan Sampah</h2>' +
-                '<p>Menampilkan data warga Komplek Perumahan Puri Indah beserta akumulasi nominal tabungan dari setoran langsung (mengacu tabel <code>users</code> dan <code>deposits</code>).</p>' +
             '</div>' +
             '<div class="table-responsive">' +
                 '<table class="custom-table" border="1" cellspacing="0" cellpadding="8">' +
@@ -792,7 +783,6 @@ function ambilFallbackTemplate(halaman) {
         '<article class="content-panel">' +
             '<div class="panel-header">' +
                 '<h2>Riwayat Rincian Setoran Langsung Warga</h2>' +
-                '<p>Gunakan fitur pencarian dan filter interaktif di bawah ini untuk menyaring riwayat setoran berdasarkan nama warga, jenis sampah, atau kondisi sampah.</p>' +
             '</div>' +
             '<div class="filter-bar">' +
                 '<div class="filter-group"><label for="filter-keyword">Cari Warga / ID Deposit:</label><input type="search" id="filter-keyword" placeholder="Ketik nama warga..." onkeyup="filterRiwayatSetoran()" /></div>' +
@@ -812,7 +802,6 @@ function ambilFallbackTemplate(halaman) {
         '<article class="content-panel">' +
             '<div class="panel-header">' +
                 '<h2>Simulasi Kalkulasi Multi-Item Setor Langsung (Dynamic Row)</h2>' +
-                '<p>Simulasi tabel dinamis untuk menghitung beberapa item sampah sekaligus: <code>harga_satuan &times; berat = subtotal</code> hingga menghasilkan <code>total_harga</code> secara otomatis <strong>tanpa potongan biaya jemput (Rp 0)</strong>.</p>' +
             '</div>' +
             '<div class="simulasi-actions">' +
                 '<button type="button" class="btn-primary" onclick="tambahBarisSimulasi()">+ Tambah Baris Item Sampah</button> ' +
@@ -831,7 +820,6 @@ function ambilFallbackTemplate(halaman) {
         '<article class="content-panel">' +
             '<div class="panel-header">' +
                 '<h2>Form Pendataan Setor Sampah Langsung</h2>' +
-                '<p>Formulir pencatatan transaksi warga yang datang menyetor sampah daur ulang secara langsung ke Bank Sampah Komplek Perumahan Puri Indah (mengacu pada tabel <code>deposits</code> dan <code>deposit_items</code>).</p>' +
             '</div>' +
             '<div id="form-error-box" class="alert-error" style="display: none;"><strong>Validasi Gagal! Mohon periksa kembali isian berikut:</strong><ul id="form-error-list"></ul></div>' +
             '<form id="form-setor-langsung" onsubmit="return prosesSubmitSetoran(event)" novalidate="novalidate">' +
